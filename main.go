@@ -1,20 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/tatsuo48/go_ddd/domain/model"
+	"github.com/tatsuo48/go_ddd/application/command"
 )
 
 func main() {
-	name := model.UserName("taro")
-	address := model.UserAddress("example.com")
-	user, err := model.NewUser(name, address)
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+	cmd := command.UserRegisterCommand{
+		Name:    "taro",
+		Address: "example.com",
 	}
 	uas := initUserApplicationService("test.txt")
-	uas.Register(user)
+	uas.Register(cmd)
 }
