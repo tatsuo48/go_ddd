@@ -15,7 +15,7 @@ import (
 
 func initUserApplicationService(fileName string) *service.UserApplicationService {
 	iUserRepositry := repositry.NewInMemoryUserRepositry(fileName)
-	iUserFactry := model.NewUserFactry()
-	userApplicationService := service.NewUserApplicationService(iUserRepositry, iUserFactry)
+	iUserFactory := model.NewUserFactory()
+	userApplicationService := service.NewUserApplicationService(iUserRepositry, iUserFactory)
 	return userApplicationService
 }

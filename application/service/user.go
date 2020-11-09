@@ -7,20 +7,20 @@ import (
 
 type UserApplicationService struct {
 	UserRepositry model.IUserRepositry
-	UserFactry    model.IUserFactry
+	UserFactory   model.IUserFactory
 }
 
-func NewUserApplicationService(repo model.IUserRepositry, factry model.IUserFactry) *UserApplicationService {
+func NewUserApplicationService(repo model.IUserRepositry, Factory model.IUserFactory) *UserApplicationService {
 	return &UserApplicationService{
 		UserRepositry: repo,
-		UserFactry:    factry,
+		UserFactory:   Factory,
 	}
 }
 
 func (uas *UserApplicationService) Register(cmd command.UserRegisterCommand) error {
 	name := model.UserName(cmd.Name)
 	address := model.UserAddress(cmd.Address)
-	user, err := uas.UserFactry.Create(name, address)
+	user, err := uas.UserFactory.Create(name, address)
 	if err != nil {
 		return err
 	}

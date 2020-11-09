@@ -6,17 +6,17 @@ import (
 	"github.com/google/uuid"
 )
 
-type IUserFactry interface {
+type IUserFactory interface {
 	Create(UserName, UserAddress) (*User, error)
 }
 
-type UserFactry struct {
+type UserFactory struct {
 }
 
-func NewUserFactry() IUserFactry {
-	return UserFactry{}
+func NewUserFactory() IUserFactory {
+	return UserFactory{}
 }
-func (uf UserFactry) Create(name UserName, address UserAddress) (*User, error) {
+func (uf UserFactory) Create(name UserName, address UserAddress) (*User, error) {
 	u, err := uuid.NewRandom()
 	if err != nil {
 		return &User{}, errors.New("UUIDの生成に失敗しました。")
