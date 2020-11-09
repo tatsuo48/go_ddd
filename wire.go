@@ -9,7 +9,7 @@ import (
 	"github.com/google/wire"
 )
 
-func initUser(fileName string) *service.UserApplicationService {
+func initUserApplicationService(fileName string) *service.UserApplicationService {
 	wire.Build(
 		repositry.NewInMemoryUserRepositry,
 		service.NewUserApplicationService,

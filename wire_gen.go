@@ -12,7 +12,7 @@ import (
 
 // Injectors from wire.go:
 
-func initUser(fileName string) *service.UserApplicationService {
+func initUserApplicationService(fileName string) *service.UserApplicationService {
 	iUserRepositry := repositry.NewInMemoryUserRepositry(fileName)
 	userApplicationService := service.NewUserApplicationService(iUserRepositry)
 	return userApplicationService

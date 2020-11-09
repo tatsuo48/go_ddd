@@ -15,6 +15,6 @@ func main() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	uas := initUser("test.txt")
+	uas := initUserApplicationService("test.txt")
 	uas.Register(user)
 }
