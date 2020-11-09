@@ -3,8 +3,6 @@ package model
 import (
 	"errors"
 	"unicode/utf8"
-
-	"github.com/google/uuid"
 )
 
 type UserName string
@@ -17,15 +15,10 @@ type User struct {
 	uuid    UUID
 }
 
-func NewUser(name UserName, address UserAddress) (*User, error) {
+func NewUser(name UserName, address UserAddress, uuid UUID) (*User, error) {
 	if utf8.RuneCountInString(string(name)) <= 3 {
 		return &User{}, errors.New("ユーザ名は3文字以上です。")
 	}
-	u, err := uuid.NewRandom()
-	if err != nil {
-		return &User{}, errors.New("UUIDの生成に失敗しました。")
-	}
-	uuid := UUID(u.String())
 	return &User{
 		name:    name,
 		address: address,

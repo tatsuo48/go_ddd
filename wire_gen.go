@@ -7,6 +7,7 @@ package main
 
 import (
 	"github.com/tatsuo48/go_ddd/application/service"
+	"github.com/tatsuo48/go_ddd/domain/model"
 	"github.com/tatsuo48/go_ddd/infrastructure/repositry"
 )
 
@@ -14,6 +15,7 @@ import (
 
 func initUserApplicationService(fileName string) *service.UserApplicationService {
 	iUserRepositry := repositry.NewInMemoryUserRepositry(fileName)
-	userApplicationService := service.NewUserApplicationService(iUserRepositry)
+	iUserFactory := model.NewUserFactory()
+	userApplicationService := service.NewUserApplicationService(iUserRepositry, iUserFactory)
 	return userApplicationService
 }
