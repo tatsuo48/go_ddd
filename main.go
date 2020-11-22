@@ -1,14 +1,13 @@
 package main
 
 import (
-	"github.com/tatsuo48/go_ddd/application/command"
+	"fmt"
 )
 
 func main() {
-	cmd := command.UserRegisterCommand{
-		Name:    "taro",
-		Address: "example.com",
-	}
-	uas := initUserApplicationService("test.txt")
-	uas.Register(cmd)
+	a, _ := NewCircleName("test")
+	b, _ := NewCircleName("test")
+	fmt.Println(a.Equals(b))
+	u, _ := NewUser("test")
+	fmt.Println(u)
 }
