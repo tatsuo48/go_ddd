@@ -31,10 +31,25 @@ type Circle struct {
 
 type ICircleRepositry interface {
 	Save(Circle) error
-	Find(CircleID) (Circle, error)
-	FindByName(CircleName) (Circle, error)
+	Find(CircleID) (*Circle, error)
+	FindByName(CircleName) *Circle
 }
 
 type ICircleFactory interface {
 	Create(CircleName, User) (Circle, error)
+}
+
+type CircleService struct {
+	circleRepositry ICircleRepositry
+}
+
+func NewCircleService(cr ICircleRepositry) CircleService {
+	return CircleService{
+		circleRepositry: cr,
+	}
+}
+
+func (cs CircleService) Exists(c Circle) bool {
+	circle := cs.circleRepositry.FindByName(c.circleName)
+	return circle != nil
 }
