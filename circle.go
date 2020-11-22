@@ -66,6 +66,18 @@ func NewCircleCreateCommand(id string, name string) CircleCreateCommand {
 	}
 }
 
+type CircleJoinCommand struct {
+	userID   string
+	circleID string
+}
+
+func NewCircleJoinCommand(userID string, circleID string) CircleJoinCommand {
+	return CircleJoinCommand{
+		userID:   userID,
+		circleID: circleID,
+	}
+}
+
 type CircleApplicationService struct {
 	circleRepositry ICircleRepositry
 	circleFactory   ICircleFactory
@@ -97,5 +109,29 @@ func (c CircleApplicationService) Create(cmd CircleCreateCommand) error {
 		return errors.New("すでに同名のサークルが存在します")
 	}
 	c.circleRepositry.Save(circle)
+	return nil
+}
+
+func (c CircleApplicationService) Join(cmd CircleJoinCommand) error {
+	userID := UserID(cmd.userID)
+	user, err := c.userRepositry.Find(userID)
+	if err != nil {
+		return err
+	}
+	if user == nil {
+		return errors.New("ユーザが見つかりませんでした")
+	}
+	circleID := CircleID(cmd.circleID)
+	circle, err := c.circleRepositry.Find(circleID)
+	if err != nil {
+		return err
+	}
+	if circle == nil {
+		return errors.New("サークルが見つかりませんでした")
+	}
+	if len(circle.members) >= 29 {
+		return errors.New("サークルの参加上限人数(30人)に達しています")
+	}
+	c.circleRepositry.Save(*circle)
 	return nil
 }
