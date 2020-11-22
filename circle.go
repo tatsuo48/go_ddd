@@ -36,7 +36,7 @@ type ICircleRepositry interface {
 }
 
 type ICircleFactory interface {
-	Create(CircleName, User) (Circle, error)
+	Create(CircleName, *User) Circle
 }
 
 type CircleService struct {
@@ -55,13 +55,47 @@ func (cs CircleService) Exists(c Circle) bool {
 }
 
 type CircleCreateCommand struct {
-	userID     UserID
-	circleName CircleName
+	userID     string
+	circleName string
 }
 
-func NewCircleCreateCommand(id UserID, name CircleName) CircleCreateCommand {
+func NewCircleCreateCommand(id string, name string) CircleCreateCommand {
 	return CircleCreateCommand{
 		userID:     id,
 		circleName: name,
 	}
+}
+
+type CircleApplicationService struct {
+	circleRepositry ICircleRepositry
+	circleFactory   ICircleFactory
+	circleService   CircleService
+	userRepositry   IUserRepositry
+}
+
+func NewCircleApplicationService(cr ICircleRepositry, cf ICircleFactory, cs CircleService, us IUserRepositry) CircleApplicationService {
+	return CircleApplicationService{
+		circleRepositry: cr,
+		circleFactory:   cf,
+		circleService:   cs,
+		userRepositry:   us,
+	}
+}
+
+func (c CircleApplicationService) Create(cmd CircleCreateCommand) error {
+	userID := UserID(cmd.userID)
+	owner, err := c.userRepositry.Find(userID)
+	if err != nil {
+		return err
+	}
+	if owner == nil {
+		return errors.New("サークルのオーナーとなるユーザが見つかりませんでした")
+	}
+	circleName := CircleName(cmd.circleName)
+	circle := c.circleFactory.Create(circleName, owner)
+	if c.circleService.Exists(circle) {
+		return errors.New("すでに同名のサークルが存在します")
+	}
+	c.circleRepositry.Save(circle)
+	return nil
 }

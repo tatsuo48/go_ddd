@@ -24,3 +24,9 @@ func NewUser(name string) (*User, error) {
 		userName: UserName(name),
 	}, nil
 }
+
+type IUserRepositry interface {
+	Save(User) error
+	Find(UserID) (*User, error)
+	FindByName(UserName) *User
+}
