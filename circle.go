@@ -53,3 +53,15 @@ func (cs CircleService) Exists(c Circle) bool {
 	circle := cs.circleRepositry.FindByName(c.circleName)
 	return circle != nil
 }
+
+type CircleCreateCommand struct {
+	userID     UserID
+	circleName CircleName
+}
+
+func NewCircleCreateCommand(id UserID, name CircleName) CircleCreateCommand {
+	return CircleCreateCommand{
+		userID:     id,
+		circleName: name,
+	}
+}
