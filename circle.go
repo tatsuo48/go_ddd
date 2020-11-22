@@ -21,3 +21,20 @@ func NewCircleName(s string) (CircleName, error) {
 func (c CircleName) Equals(otherCircleName CircleName) bool {
 	return string(c) == string(otherCircleName)
 }
+
+type Circle struct {
+	circeID    CircleID
+	circleName CircleName
+	owner      User
+	members    []User
+}
+
+type ICircleRepositry interface {
+	Save(Circle) error
+	Find(CircleID) (Circle, error)
+	FindByName(CircleName) (Circle, error)
+}
+
+type ICircleFactory interface {
+	Create(CircleName, User) (Circle, error)
+}
