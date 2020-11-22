@@ -2,31 +2,38 @@ package model
 
 import (
 	"errors"
-
-	"github.com/google/uuid"
+	"unicode/utf8"
 )
 
-type UserID string
 type UserName string
+type UserAddress string
+type UUID string
 
 type User struct {
-	userID   UserID
-	userName UserName
+	name    UserName
+	address UserAddress
+	uuid    UUID
 }
 
-func NewUser(name string) (*User, error) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		return &User{}, errors.New("UUIDの生成に失敗しました。")
+func NewUser(name UserName, address UserAddress, uuid UUID) (*User, error) {
+	if utf8.RuneCountInString(string(name)) <= 3 {
+		return &User{}, errors.New("ユーザ名は3文字以上です。")
 	}
 	return &User{
-		userID:   UserID(u.String()),
-		userName: UserName(name),
+		name:    name,
+		address: address,
+		uuid:    uuid,
 	}, nil
 }
 
-type IUserRepositry interface {
-	Save(User) error
-	Find(UserID) (*User, error)
-	FindByName(UserName) *User
+func (u *User) Name() UserName {
+	return u.name
+}
+
+func (u *User) Address() UserAddress {
+	return u.address
+}
+
+func (u *User) UUID() UUID {
+	return u.uuid
 }
